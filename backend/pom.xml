@@ -98,13 +98,6 @@
             <version>2.25.1</version>
         </dependency>
 
-        <!--jDeferred promices-->
-        <dependency>
-            <groupId>org.jdeferred</groupId>
-            <artifactId>jdeferred-core</artifactId>
-            <version>1.2.6</version>
-        </dependency>
-
     </dependencies>
 
     <build>

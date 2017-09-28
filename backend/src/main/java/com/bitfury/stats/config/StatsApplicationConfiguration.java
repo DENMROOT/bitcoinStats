@@ -1,10 +1,5 @@
 package com.bitfury.stats.config;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import org.jdeferred.DeferredManager;
-import org.jdeferred.impl.DefaultDeferredManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,16 +39,6 @@ public class StatsApplicationConfiguration {
             .addConverterFactory(JacksonConverterFactory.create(objectMapper()))
             .build()
             .create(BitcoinRestApi.class);
-    }
-
-    @Bean
-    public ExecutorService executorService() {
-        return Executors.newFixedThreadPool(1);
-    }
-
-    @Bean
-    public DeferredManager deferredManager() {
-        return new DefaultDeferredManager(executorService());
     }
 
     @Bean
