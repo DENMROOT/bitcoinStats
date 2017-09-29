@@ -28,23 +28,26 @@ import retrofit2.Response;
 public class BlockServiceImpl implements BlockService {
     private static final Logger LOG = LoggerFactory.getLogger(BlockServiceImpl.class);
     public static final int DEFAULT_MINING_TIME = 600000;
-    public static final int DOUBLE_CONVERSION = 100;
+    public static final int PERCENTAGE_CONVERSION_MULTIPLIER = 100;
 
     @Autowired
     private BitcoinRestApi restService;
 
     @Override
-    public List<Block> getBlocksWithMiningTime() {
+    public BlockData getBlocksWithMiningTime() {
 
         BlockData blocksData = getBlocksData();
         List<Block> blocks = calculateMiningTime(blocksData);
 
-        return blocks.stream().limit(LIMIT).collect(Collectors.toList());
+        BlockData updatedBlocksData = new BlockData();
+        updatedBlocksData.setData(blocks.stream().limit(LIMIT).collect(Collectors.toList()));
+
+        return updatedBlocksData;
     }
 
     @Override
     public ChartData getChartData() {
-        List<Block> blocksWithMiningTime = getBlocksWithMiningTime();
+        List<Block> blocksWithMiningTime = getBlocksWithMiningTime().getData();
 
         List<String> labels = blocksWithMiningTime.stream()
             .map(Block::getHeight)
@@ -59,7 +62,7 @@ public class BlockServiceImpl implements BlockService {
     }
 
     private double calculateMiningTimePercentage(Block block) {
-        double d = (block.getMiningTime().getTime() * 1.0 / DEFAULT_MINING_TIME) * DOUBLE_CONVERSION;
+        double d = (block.getMiningTime().getTime() * 1.0 / DEFAULT_MINING_TIME) * PERCENTAGE_CONVERSION_MULTIPLIER;
 
         return Double.parseDouble(String.format("%.0f", d));
     }

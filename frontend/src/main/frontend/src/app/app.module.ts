@@ -17,7 +17,7 @@ import { BlocksService } from "./components/service/blocks.service";
     BrowserModule,
     FormsModule,
     HttpModule,
-    ChartsModule
+    ChartsModule,
   ],
   providers: [BlocksService],
   bootstrap: [AppComponent]

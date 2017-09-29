@@ -1,36 +1,54 @@
-<div class="row">
-  <div class="col-md-6">
-    <div style="display: block;">
-      <canvas baseChart width="400" height="400"
-              [datasets]="lineChartData"
-              [labels]="lineChartLabels"
-              [options]="lineChartOptions"
-              [colors]="lineChartColors"
-              [legend]="lineChartLegend"
-              [chartType]="lineChartType"
-              (chartHover)="chartHovered($event)"
-              (chartClick)="chartClicked($event)"></canvas>
+<div class="container-fluid">
+  <div class="sm" style="height:50px;"></div>
+
+  <div class="row">
+    <div class="col-sm-1">
+      <div>
+        <button (click)="loadBlocksData()">Load data</button>
+      </div>
     </div>
+    <div class="col-sm-10">
+
+      <div style="display: block;">
+        <canvas baseChart width="400" height="400"
+                [datasets]="lineChartData"
+                [labels]="lineChartLabels"
+                [options]="lineChartOptions"
+                [colors]="lineChartColors"
+                [legend]="lineChartLegend"
+                [chartType]="lineChartType"
+                (chartHover)="chartHovered($event)"
+                (chartClick)="chartClicked($event)"></canvas>
+      </div>
+
+      <table class="table table-hover">
+        <thead>
+        <tr>
+          <td>Height</td>
+          <td>Hash</td>
+          <td>Mining Time</td>
+          <td>Block Time</td>
+          <td>Arrival Time</td>
+          <td>Confirmations</td>
+          <td>Transactions</td>
+          <td>Mining Pool</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let transfer of blocks">
+          <td>{{transfer.height}}</td>
+          <td>{{transfer.hash}}</td>
+          <td>{{transfer.miningTime | date:'mm:ss'}}</td>
+          <td>{{transfer.block_time | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+          <td>{{transfer.arrival_time | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+          <td>{{transfer.confirmations}}</td>
+          <td>{{transfer.transactions}}</td>
+          <td>{{transfer.miningpool_name}}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-sm-1"></div>
   </div>
-
-  <div>
-    <button (click)="loadBlocksData()">Load data</button>
-
-  </div>
-  <!--<div class="col-md-6" style="margin-bottom: 10px">-->
-    <!--<table class="table table-responsive table-condensed">-->
-      <!--<tr>-->
-        <!--<th *ngFor="let label of lineChartLabels">{{label}}</th>-->
-      <!--</tr>-->
-      <!--<tr *ngFor="let d of lineChartData">-->
-        <!--<td *ngFor="let label of lineChartLabels; let j=index">{{d && d.data[j]}}</td>-->
-      <!--</tr>-->
-    <!--</table>-->
-    <!--<button (click)="randomize()">CLICK</button>-->
-  <!--</div>-->
-
-  <!--<li *ngFor="let label of chartData.labels">-->
-    <!--{{ label}}-->
-  <!--</li>-->
-
 </div>
+
