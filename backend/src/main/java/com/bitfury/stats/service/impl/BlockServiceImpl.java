@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.bitfury.stats.model.Block;
 import com.bitfury.stats.model.BlockData;
+import com.bitfury.stats.model.ChartData;
 import com.bitfury.stats.service.BlockService;
 import com.bitfury.stats.service.rest.BitcoinRestApi;
 import retrofit2.Response;
@@ -26,6 +27,8 @@ import retrofit2.Response;
  */
 public class BlockServiceImpl implements BlockService {
     private static final Logger LOG = LoggerFactory.getLogger(BlockServiceImpl.class);
+    public static final int DEFAULT_MINING_TIME = 600000;
+    public static final int DOUBLE_CONVERSION = 100;
 
     @Autowired
     private BitcoinRestApi restService;
@@ -37,6 +40,28 @@ public class BlockServiceImpl implements BlockService {
         List<Block> blocks = calculateMiningTime(blocksData);
 
         return blocks.stream().limit(LIMIT).collect(Collectors.toList());
+    }
+
+    @Override
+    public ChartData getChartData() {
+        List<Block> blocksWithMiningTime = getBlocksWithMiningTime();
+
+        List<String> labels = blocksWithMiningTime.stream()
+            .map(Block::getHeight)
+            .map(Object::toString)
+            .collect(Collectors.toList());
+
+        List<Double> events = blocksWithMiningTime.stream()
+            .map(block -> calculateMiningTimePercentage(block))
+            .collect(Collectors.toList());
+
+        return ChartData.builder().labels(labels).events(events).build();
+    }
+
+    private double calculateMiningTimePercentage(Block block) {
+        double d = (block.getMiningTime().getTime() * 1.0 / DEFAULT_MINING_TIME) * DOUBLE_CONVERSION;
+
+        return Double.parseDouble(String.format("%.0f", d));
     }
 
     private List<Block> calculateMiningTime(BlockData blocksData) {

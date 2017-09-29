@@ -16,8 +16,8 @@
   <div>
     <button (click)="loadBlocksData()">Load data</button>
 
-    <li *ngFor="let block of blocks">
-      {{ block.height }} : {{ block.miningTime }}
+    <li *ngFor="let label of chartData.labels">
+      {{ label}}
     </li>
 
   </div>

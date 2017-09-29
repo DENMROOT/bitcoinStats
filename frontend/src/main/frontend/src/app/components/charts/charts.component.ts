@@ -12,9 +12,20 @@ export class LineChartDemoComponent {
 
   // lineChart
   public lineChartData: Array<any> = [
-    {data: [10, 20, 10, 20, 10, 20, 10], label: 'Series A'}
+    {data: [], label: 'Series A'}
   ];
-  public lineChartLabels: Array<any> = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+  public lineChartLabels: Array<any> = [
+    "1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
+    "11", "12", "13", "4", "5", "6", "7", "8", "9", "10",
+    "21", "2", "3", "4", "5", "6", "7", "8", "9", "10",
+    "31", "2", "3", "4", "5", "6", "7", "8", "9", "10",
+    "41", "2", "3", "4", "5", "6", "7", "8", "9", "10",
+    "51", "2", "3", "4", "5", "6", "7", "8", "9", "10",
+    "61", "2", "3", "4", "5", "6", "7", "8", "9", "10",
+    "71", "2", "3", "4", "5", "6", "7", "8", "9", "10",
+    "81", "2", "3", "4", "5", "6", "7", "8", "9", "10",
+    "91", "2", "3", "4", "5", "6", "7", "8", "9", "10"
+  ];
   public lineChartOptions: any = {
     responsive: true
   };
@@ -31,21 +42,24 @@ export class LineChartDemoComponent {
   public lineChartLegend: boolean = true;
   public lineChartType: string = 'bar';
 
-  blocks: BlockWrapper;
+  chartData: ChartData;
 
   public loadBlocksData():void {
-    this.blocksService.getBlocks().subscribe(data => this.blocks = JSON.parse(data));
+    this.blocksService.getBlocks().subscribe(
+      (response) => {
+        // Init chart data array
+        let data:Array<any> = new Array();
+        data[0] = {data: response.events, label: 'Events'};
+        // Init chart labels
+        let labels : Array<any> = new Array();
+        labels[0] = response.labels;
+        // Set the chart data
+        this.lineChartData   = data;
+        this.lineChartLabels = labels;
 
-    let _lineChartLabels :Array<any> = new Array(100);
-    let blocks = this.blocks;
-
-    for (let i = 0; i < _lineChartLabels.length; i++) {
-      _lineChartLabels[i] = blocks;
-    }
-
-    this.lineChartLabels = _lineChartLabels;
-
-    // this.lineChartData = [{data: [10, 20, 30, 40, 50, 60, 50], label: 'Series XXX'}]
+      }, (error) => {
+        console.log(error);
+      });
   }
 
   // events
@@ -58,12 +72,7 @@ export class LineChartDemoComponent {
   }
 }
 
-export interface BlockWrapper {
-  blocks: Block[]
-}
-
-export interface Block {
-  hash: string;
-  height: number;
-  miningTime: number;
+export class ChartData {
+  labels: number[];
+  events: number[];
 }

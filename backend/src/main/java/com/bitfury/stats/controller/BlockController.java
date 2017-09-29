@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bitfury.stats.model.Block;
+import com.bitfury.stats.model.ChartData;
 import com.bitfury.stats.service.BlockService;
 
 
@@ -25,5 +26,13 @@ public class BlockController {
     )
     List<Block> getBlocks() {
         return blockService.getBlocksWithMiningTime();
+    }
+
+    @RequestMapping(
+        path = "api/stats",
+        produces = "application/json;charset=UTF-8"
+    )
+    ChartData getChartData() {
+        return blockService.getChartData();
     }
 }
