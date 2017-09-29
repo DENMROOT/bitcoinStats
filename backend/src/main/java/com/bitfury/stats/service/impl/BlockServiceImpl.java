@@ -27,7 +27,6 @@ import retrofit2.Response;
 public class BlockServiceImpl implements BlockService {
     private static final Logger LOG = LoggerFactory.getLogger(BlockServiceImpl.class);
 
-
     @Autowired
     private BitcoinRestApi restService;
 

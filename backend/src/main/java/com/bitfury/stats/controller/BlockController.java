@@ -20,7 +20,7 @@ public class BlockController {
     private BlockService blockService;
 
     @RequestMapping(
-        path = "/blocks",
+        path = "api/blocks",
         produces = "application/json;charset=UTF-8"
     )
     List<Block> getBlocks() {
