@@ -10,5 +10,5 @@ Run:
 > mvn spring-boot:run
 
 View:
-localhost:8080
+> localhost:8080
 
