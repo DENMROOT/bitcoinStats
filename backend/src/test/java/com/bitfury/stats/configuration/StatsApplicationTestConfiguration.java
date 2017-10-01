@@ -1,4 +1,4 @@
-package com.bitfury.stats.config;
+package com.bitfury.stats.configuration;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -14,10 +14,10 @@ import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
 /**
- * Application main configuration class
+ * Application test configuration class
  */
 @Configuration
-public class StatsApplicationConfiguration {
+public class StatsApplicationTestConfiguration {
 
     @Value(ApplicationConstants.BITCOIN_API_URL_KEY)
     private String apiUrlKey;

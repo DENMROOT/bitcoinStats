@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 
 /**
- * CHartData class
+ * ChartData class
  */
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)

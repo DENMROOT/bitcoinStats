@@ -4,9 +4,19 @@ import com.bitfury.stats.model.BlockData;
 import com.bitfury.stats.model.ChartData;
 
 /**
- * Created by Denys_Makarov on 9/28/2017.
+ *  Interface for all blocks and blocks statistics data
  */
 public interface BlockService {
+
+    /**
+     * Get blocks with mining time
+     * @return BlockData
+     */
     BlockData getBlocksWithMiningTime();
+
+    /**
+     * Get chart statistics data
+     * @return ChartData
+     */
     ChartData getChartData();
 }

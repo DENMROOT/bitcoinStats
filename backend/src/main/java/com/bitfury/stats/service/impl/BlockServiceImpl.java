@@ -1,11 +1,9 @@
 package com.bitfury.stats.service.impl;
 
-import static com.bitfury.stats.ApplicationConstants.APIKEY;
+import static com.bitfury.stats.ApplicationConstants.DEFAULT_MINING_TIME;
 import static com.bitfury.stats.ApplicationConstants.LIMIT;
-import static com.bitfury.stats.ApplicationConstants.PAGE;
-import static com.bitfury.stats.ApplicationConstants.SORT_DIR;
+import static com.bitfury.stats.ApplicationConstants.PERCENTAGE_CONVERSION_MULTIPLIER;
 
-import java.io.IOException;
 import java.time.Duration;
 import java.util.Date;
 import java.util.List;
@@ -14,29 +12,29 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.bitfury.stats.model.Block;
 import com.bitfury.stats.model.BlockData;
 import com.bitfury.stats.model.ChartData;
+import com.bitfury.stats.service.BitcoinRestApiService;
 import com.bitfury.stats.service.BlockService;
-import com.bitfury.stats.service.rest.BitcoinRestApi;
-import retrofit2.Response;
 
 /**
- * Created by Denys_Makarov on 9/28/2017.
+ * Blocks service
  */
+@Service
 public class BlockServiceImpl implements BlockService {
     private static final Logger LOG = LoggerFactory.getLogger(BlockServiceImpl.class);
-    public static final int DEFAULT_MINING_TIME = 600000;
-    public static final int PERCENTAGE_CONVERSION_MULTIPLIER = 100;
 
     @Autowired
-    private BitcoinRestApi restService;
+    private BitcoinRestApiService bitcoinRestApiService;
 
     @Override
     public BlockData getBlocksWithMiningTime() {
+        LOG.info("GetBlocksWithMiningTime() service call received");
 
-        BlockData blocksData = getBlocksData();
+        BlockData blocksData = bitcoinRestApiService.getBlocksData();
         List<Block> blocks = calculateMiningTime(blocksData);
 
         BlockData updatedBlocksData = new BlockData();
@@ -47,6 +45,8 @@ public class BlockServiceImpl implements BlockService {
 
     @Override
     public ChartData getChartData() {
+        LOG.info("getChartData() service call received");
+
         List<Block> blocksWithMiningTime = getBlocksWithMiningTime().getData();
 
         List<String> labels = blocksWithMiningTime.stream()
@@ -55,7 +55,7 @@ public class BlockServiceImpl implements BlockService {
             .collect(Collectors.toList());
 
         List<Double> events = blocksWithMiningTime.stream()
-            .map(block -> calculateMiningTimePercentage(block))
+            .map(this::calculateMiningTimePercentage)
             .collect(Collectors.toList());
 
         return ChartData.builder().labels(labels).events(events).build();
@@ -85,16 +85,4 @@ public class BlockServiceImpl implements BlockService {
         return sortedBlocks;
     }
 
-    private BlockData getBlocksData() {
-        Response<BlockData> response = null;
-
-        try {
-            response = restService.getBlocksWithPagination(PAGE, LIMIT + 1, SORT_DIR, APIKEY)
-                .execute();
-        } catch (IOException e) {
-            LOG.error("GetCurrencies() Response to api failed, {}", response.message());
-            throw new IllegalStateException(response.message());
-        }
-        return response.body();
-    }
 }
